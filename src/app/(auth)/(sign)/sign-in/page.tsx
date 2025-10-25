@@ -50,10 +50,8 @@ export default function SingIn() {
       const response = await authClient.signIn.email({
         email: data.email,
         password: data.password,
-        callbackURL: "http://localhost:3000",
+        callbackURL: "http://localhost:3000/dates",
       });
-
-      console.log(response);
 
       if (response.error?.code === "INVALID_EMAIL_OR_PASSWORD") {
         setError("email", { message: "Campo inválido" });
@@ -65,11 +63,17 @@ export default function SingIn() {
   }
 
   async function handleSignInWithGithub() {
-    await handleSignInSocial(SocialProvider.GITHUB);
+    await handleSignInSocial({
+      provider: SocialProvider.GITHUB,
+      callbackURL: "http://localhost:3000/dates",
+    });
   }
 
   async function handleSignInWithGoogle() {
-    await handleSignInSocial(SocialProvider.GOOGLE);
+    await handleSignInSocial({
+      provider: SocialProvider.GOOGLE,
+      callbackURL: "http://localhost:3000/dates",
+    });
   }
 
   function forgetPassword(e: React.MouseEvent) {

@@ -1,17 +1,31 @@
-import { authClient } from "./auth"
+
+import { cookies } from "next/headers";
 
 export async function getSession() {
   try {
-    const response = await authClient.getSession();
-    console.log(response)
-    if (response.data != null) {
-      return true
-    } else {
-      return false
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get("better-auth.session_token"); // ou o nome correto do seu cookie
+
+    if (!sessionCookie) {
+      return null;
     }
-  } catch (_) {
-    return false
+
+    // Faz a requisição para a API com o cookie
+    const response = await fetch("http://localhost:3333/api/auth/get-session", {
+      headers: {
+        Cookie: `better-auth.session_token=${sessionCookie.value}`,
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erro ao buscar sessão:", error);
+    return null;
   }
-
-
-}
+} 

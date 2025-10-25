@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Lato, Plus_Jakarta_Sans } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa6";
 import z from "zod";
@@ -55,18 +56,24 @@ export default function SingUp() {
       if (response.error?.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
         setError("email", { message: "Email já cadastrado" });
       }
-      console.log(response);
+      redirect("/dates");
     } catch (error) {
       console.log(error);
     }
   }
 
   async function handleSignInWithGithub() {
-    await handleSignInSocial(SocialProvider.GITHUB);
+    await handleSignInSocial({
+      provider: SocialProvider.GITHUB,
+      callbackURL: "http://localhost:3000/dates",
+    });
   }
 
   async function handleSignInWithGoogle() {
-    await handleSignInSocial(SocialProvider.GOOGLE);
+    await handleSignInSocial({
+      provider: SocialProvider.GOOGLE,
+      callbackURL: "http://localhost:3000/dates",
+    });
   }
 
   return (

@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,6 +37,7 @@ export default function ResetPasswordPage() {
         email: data.email,
         redirectTo: "http://localhost:3000/reset-password/token",
       });
+      toast.success("Email de redefinição enviado!");
       console.log(response);
     } catch (error) {
       console.log(error);
