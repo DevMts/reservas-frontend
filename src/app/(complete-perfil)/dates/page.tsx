@@ -1,5 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -9,8 +10,7 @@ import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getUserId } from "@/lib/get-id";
-// import { getUserId } from "@/lib/get-id";
+import { useUser } from "@/context/user-context";
 import { isValidCPF } from "@/lib/utils/is-valid-cpf";
 
 const onlyNumbers = (value: string) => value.replace(/\D/g, "");
@@ -57,10 +57,18 @@ export default function Dates() {
     handleSubmit,
     watch,
     setValue,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<DataForm>({
     resolver: zodResolver(dataSchema),
   });
+
+  const { userId } = useUser();
+  !userId && (
+    <div className="p-4 text-red-500 text-sm">
+      Falha ao carregar usuário. Verifique o console.
+    </div>
+  );
 
   const cpfValue = watch("cpf") || "";
 
@@ -78,9 +86,7 @@ export default function Dates() {
 
   async function onSubmit(data: DataForm) {
     try {
-      const id = await getUserId();
-
-      const response = await api.post(`/user/create/${id}`, {
+      const response = await api.post(`/user/create/${userId}`, {
         cpf: onlyNumbers(data.cpf),
         date_birth: data.birthdate,
         ddd: data.ddd,
@@ -97,8 +103,18 @@ export default function Dates() {
       toast.success("Dados enviados com sucesso!");
 
       router.push("/address");
-    } catch (_error) {
-      toast.error("Erro ao enviar os dados do formulário");
+    } catch (error) {
+      const err = error as AxiosError<{ error: string }>;
+
+      if (err.response?.data?.error === "CPF already in use") {
+        toast.error("Este CPF já está em uso");
+        setError("cpf", {
+          type: "custom",
+          message: "Este CPF já está em uso",
+        });
+      } else {
+        toast.error("Ocorreu um erro inesperado.");
+      }
     }
   }
 

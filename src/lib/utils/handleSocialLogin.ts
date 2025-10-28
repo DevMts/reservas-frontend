@@ -11,13 +11,10 @@ interface SocialLoginProps {
 
 export async function handleSignInSocial({ provider, callbackURL }: SocialLoginProps) {
   try {
-    const response = await authClient.signIn.social({
+    await authClient.signIn.social({
       provider: provider,
       callbackURL: callbackURL,
     });
-    if (response.data?.url) {
-      window.location.href = response.data.url;
-    }
   } catch (error) {
     console.error(`Erro ao iniciar login com ${provider}:`, error);
   }

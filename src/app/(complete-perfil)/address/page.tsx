@@ -10,7 +10,7 @@ import { api } from "@/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getUserId } from "@/lib/get-id";
+import { useUser } from "@/context/user-context";
 
 const addressSchema = z.object({
   cep: z.string().min(8, "CEP deve ter pelo menos 8 caracteres"),
@@ -43,6 +43,7 @@ export default function Address() {
     state: "",
   });
   const router = useRouter();
+  const { userId } = useUser();
 
   async function handleCepChange(e: React.ChangeEvent<HTMLInputElement>) {
     let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
@@ -92,19 +93,11 @@ export default function Address() {
       );
 
       const addressId = addressResponse.data.address.id;
-      const userId = await getUserId();
 
-      await api.put(
-        "/user/add-address",
-        {
-          userId,
-          addressId,
-        },
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      await api.put("/user/add-address", {
+        userId,
+        addressId,
+      });
       toast.success("Endereço salvo com sucesso!");
 
       router.push("/congratulations");

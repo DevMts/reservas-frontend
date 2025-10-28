@@ -23,6 +23,7 @@ export async function getSession() {
     }
 
     const data = await response.json();
+    console.log("getSession data:", data);
     return data;
   } catch (error) {
     console.error("Erro ao buscar sessão:", error);

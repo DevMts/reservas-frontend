@@ -1,14 +1,26 @@
+import { cookies } from "next/headers";
 import { api } from "@/api";
 
-
-
 export async function getUserId() {
-  const id = await api
-    .get("/api/auth/get-id", {
-      headers: {
-        "Content-Type": "application/json",
-      },
+  try {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get("better-auth.session_token"); // ou o nome correto do seu cookie
+
+    if (!sessionCookie) {
+      return null;
+    }
+
+    const id = await api.get("/api/auth/get-id", {
       withCredentials: true,
-    })
-  return id.data.id;
+      headers: {
+        Cookie: `better-auth.session_token=${sessionCookie.value}`,
+      },
+    });
+    console.log("getUserId id:", id);
+
+    return id.data.id;
+  } catch (error) {
+    console.error("Erro ao obter o ID do usuário:", error);
+    return null;
+  }
 }

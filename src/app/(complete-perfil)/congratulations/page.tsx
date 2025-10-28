@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Spinner } from "@/components/ui/spinner";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -10,11 +12,22 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export default function Congratulations() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push("/dashboard");
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [router]);
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 50 }} // começa invisível e um pouco abaixo
-      animate={{ opacity: 1, y: 0 }} // sobe e aparece
-      transition={{ duration: 0.8, ease: "easeOut" }} // suaviza a entrada
+      animate={{ opacity: 1, y: 0 }} // sobe e aparece // suaviza a entrada
+      exit={{ opacity: 0, y: 50 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
       className="flex flex-col items-center justify-center text-center"
     >
       <motion.h1

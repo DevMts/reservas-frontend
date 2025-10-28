@@ -1,4 +1,6 @@
 import { redirect } from "next/navigation";
+import { UserProvider } from "@/context/user-context";
+import { getUser } from "@/lib/get-user";
 import { getSession } from "@/lib/session";
 
 export default async function ProtectedLayout({
@@ -7,11 +9,17 @@ export default async function ProtectedLayout({
   children: React.ReactNode;
 }) {
   const session = await getSession();
-  console.log("ProtectedLayout session:", session);
+  const user = await getUser();
 
-  if (!session) {
+  if (!session || !user) {
     redirect("/sign-in");
   }
 
-  return <>{children}</>;
+  if (user?.completed_profile === false) {
+    redirect("/dates");
+  }
+
+  const userId = user.id;
+
+  return <UserProvider userId={userId}>{children}</UserProvider>;
 }

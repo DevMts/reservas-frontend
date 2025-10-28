@@ -57,6 +57,7 @@ export default function SingIn() {
         setError("email", { message: "Campo inválido" });
         setError("password", { message: "Campo inválido" });
       }
+      router.push("/dashboard");
     } catch (error) {
       console.log(error);
     }
@@ -67,6 +68,7 @@ export default function SingIn() {
       provider: SocialProvider.GITHUB,
       callbackURL: "http://localhost:3000/dates",
     });
+    router.push("/dashboard");
   }
 
   async function handleSignInWithGoogle() {
@@ -74,6 +76,7 @@ export default function SingIn() {
       provider: SocialProvider.GOOGLE,
       callbackURL: "http://localhost:3000/dates",
     });
+    router.push("/dashboard");
   }
 
   function forgetPassword(e: React.MouseEvent) {
