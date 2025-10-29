@@ -1,4 +1,8 @@
-"use client";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+("use client");
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lato, Plus_Jakarta_Sans } from "next/font/google";
 import Image from "next/image";

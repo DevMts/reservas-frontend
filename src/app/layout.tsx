@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { UserProvider } from "@/context/user-context";

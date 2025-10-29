@@ -1,8 +1,10 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { redirect } from "next/navigation";
 import { UserProvider } from "@/context/user-context";
 import { getUser } from "@/lib/get-user";
 import { getSession } from "@/lib/session";
-export const dynamic = "force-dynamic";
 
 export default async function ProtectedLayout({
   children,
@@ -12,15 +14,8 @@ export default async function ProtectedLayout({
   const session = await getSession();
   const user = await getUser();
 
-  if (!session || !user) {
-    redirect("/sign-in");
-  }
+  if (!session || !user) redirect("/sign-in");
+  if (user?.completed_profile === false) redirect("/dates");
 
-  if (user?.completed_profile === false) {
-    redirect("/dates");
-  }
-
-  const userId = user.id;
-
-  return <UserProvider userId={userId}>{children}</UserProvider>;
+  return <UserProvider userId={user.id}>{children}</UserProvider>;
 }
