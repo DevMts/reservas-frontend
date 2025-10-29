@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { UserProvider } from "@/context/user-context";
 import { getUser } from "@/lib/get-user";
 import { getSession } from "@/lib/session";
+export const dynamic = "force-dynamic";
 
 export default async function ProtectedLayout({
   children,
