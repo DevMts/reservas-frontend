@@ -1,4 +1,3 @@
-
 import { cookies } from "next/headers";
 
 export async function getSession() {
@@ -11,12 +10,15 @@ export async function getSession() {
     }
 
     // Faz a requisição para a API com o cookie
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/get-session`, {
-      headers: {
-        Cookie: `better-auth.session_token=${sessionCookie.value}`,
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/get-session`,
+      {
+        headers: {
+          Cookie: `better-auth.session_token=${sessionCookie.value}`,
+        },
+        cache: "no-store",
       },
-      cache: "no-store",
-    });
+    );
 
     if (!response.ok) {
       return null;
@@ -24,8 +26,7 @@ export async function getSession() {
 
     const data = await response.json();
     return data;
-  } catch (error) {
-    console.error("Erro ao buscar sessão:", error);
+  } catch (_error) {
     return null;
   }
-} 
+}

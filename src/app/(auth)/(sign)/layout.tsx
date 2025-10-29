@@ -1,7 +1,4 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
-("use client");
+"use client";
 
 import { motion } from "framer-motion";
 import Image from "next/image";

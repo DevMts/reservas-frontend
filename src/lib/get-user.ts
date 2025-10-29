@@ -1,8 +1,6 @@
 import { api } from "@/api";
 import { getUserId } from "./get-id";
 
-
-
 export async function getUser() {
   try {
     const id = await getUserId();
@@ -11,10 +9,9 @@ export async function getUser() {
         "Content-Type": "application/json",
       },
       withCredentials: true,
-    })
+    });
     return user.data.user;
-  } catch (error) {
-    console.error("Erro ao obter o usuário:", error);
+  } catch (_error) {
     return null;
   }
 }
