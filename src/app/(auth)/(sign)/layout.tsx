@@ -27,7 +27,7 @@ export default function AuthLayout({
 
       {/* Imagem deslizando à frente */}
       <motion.div
-        className="absolute top-1/2 -translate-y-1/2 z-10 rounded-2xl"
+        className="absolute top-1/2 -translate-y-1/2 z-10 rounded-2xl hidden lg:flex"
         animate={{ x: isSignIn ? 300 : -300 }} // ajuste conforme a distância que quer
         transition={{ type: "spring", stiffness: 200, damping: 30 }}
       >
@@ -39,7 +39,7 @@ export default function AuthLayout({
           className="rounded-2xl"
         />
       </motion.div>
-      <section className="h-[704px] w-160"></section>
+      <section className="h-[704px] w-160 hidden lg:flex"></section>
     </main>
   );
 }

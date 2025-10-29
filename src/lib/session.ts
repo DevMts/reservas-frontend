@@ -11,7 +11,7 @@ export async function getSession() {
     }
 
     // Faz a requisição para a API com o cookie
-    const response = await fetch("http://localhost:3333/api/auth/get-session", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/get-session`, {
       headers: {
         Cookie: `better-auth.session_token=${sessionCookie.value}`,
       },
@@ -23,7 +23,6 @@ export async function getSession() {
     }
 
     const data = await response.json();
-    console.log("getSession data:", data);
     return data;
   } catch (error) {
     console.error("Erro ao buscar sessão:", error);

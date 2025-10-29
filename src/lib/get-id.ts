@@ -19,8 +19,7 @@ export async function getUserId() {
     console.log("getUserId id:", id);
 
     return id.data.id;
-  } catch (error) {
-    console.error("Erro ao obter o ID do usuário:", error);
+  } catch (_error) {
     return null;
   }
 }
