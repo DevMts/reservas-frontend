@@ -30,18 +30,13 @@ export default function Address() {
     register,
     control,
     setError,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<AddressFormData>({
     resolver: zodResolver(addressSchema),
   });
 
   const [cep, setCep] = useState("");
-  const [address, setAddress] = useState({
-    street: "",
-    neighborhood: "",
-    city: "",
-    state: "",
-  });
   const router = useRouter();
   const { userId } = useUser();
 
@@ -59,16 +54,14 @@ export default function Address() {
 
         if (data.erro) {
           setError("cep", { message: "CEP inváilido" });
-          setAddress({ street: "", neighborhood: "", city: "", state: "" });
           return;
         }
 
-        setAddress({
-          street: data.logradouro || "",
-          neighborhood: data.bairro || "",
-          city: data.localidade || "",
-          state: data.uf || "",
-        });
+        setValue("street", data.logradouro || "");
+        setValue("neighborhood", data.bairro || "");
+        setValue("city", data.localidade || "");
+        setValue("state", data.uf || "");
+        setValue("country", "Brasil"); // se quiser já definir
       } catch (err) {
         console.error("Erro ao buscar o CEP:", err);
       }
@@ -139,7 +132,6 @@ export default function Address() {
           id="street"
           type="text"
           placeholder="Rua"
-          value={address.street}
           className="mt-2"
           {...register("street")}
           {...(errors.street && (
@@ -172,7 +164,6 @@ export default function Address() {
           id="neighborhood"
           type="text"
           placeholder="Bairro"
-          value={address.neighborhood}
           className="mt-2"
           {...register("neighborhood")}
         />
@@ -189,7 +180,6 @@ export default function Address() {
           id="city"
           type="text"
           placeholder="Cidade"
-          value={address.city}
           className="mt-2"
           {...register("city")}
         />
@@ -204,7 +194,6 @@ export default function Address() {
           id="state"
           type="text"
           placeholder="UF"
-          value={address.state}
           className="mt-2"
           {...register("state")}
         />
@@ -221,7 +210,6 @@ export default function Address() {
           id="state"
           type="text"
           placeholder="País"
-          value={address.state && "Brasil"}
           className="mt-2"
           {...register("country")}
         />

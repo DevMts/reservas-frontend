@@ -1,25 +1,24 @@
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { UserProvider } from "@/context/user-context";
-import { getUser } from "@/lib/get-user";
+import { getUserId } from "@/lib/get-id";
 import { Providers } from "./providers";
 
 export default async function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  const user = await getUser();
-  const userId: string | null = user?.id;
+	const user = await getUserId();
 
-  return (
-    <html lang="pt" suppressHydrationWarning>
-      <body className="bg-background text-foreground transition-colors duration-300">
-        <Providers>
-          <UserProvider userId={userId}>{children}</UserProvider>
-        </Providers>
-        <Toaster position="top-center" />
-      </body>
-    </html>
-  );
+	return (
+		<html lang="pt" suppressHydrationWarning>
+			<body className="bg-background text-foreground transition-colors duration-300">
+				<Providers>
+					<UserProvider userId={user}>{children}</UserProvider>
+				</Providers>
+				<Toaster position="top-center" />
+			</body>
+		</html>
+	);
 }

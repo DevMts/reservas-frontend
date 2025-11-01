@@ -11,12 +11,12 @@ export async function getUserId() {
     }
 
     const id = await api.get("/api/auth/get-id", {
+      url: process.env.INTERNAL_API_URL,
       withCredentials: true,
       headers: {
         Cookie: `better-auth.session_token=${sessionCookie.value}`,
       },
     });
-    console.log("getUserId id:", id);
 
     return id.data.id;
   } catch (_error) {
